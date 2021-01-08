@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sawchain;
+
+message SystemAdmin {
+    // The System Admin's public key.
+    string publicKey = 1;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp.
+    uint64 timestamp = 2;
+}
+
+message CompanyAdmin {
+    // The Company Admin's public key.
+    string publicKey = 1;
+
+    // The Company's state address.
+    string company = 2;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 3;
+}
+
+message Operator {
+    // The Operator's public key.
+    string publicKey = 1;
+
+    // The Company's state address.
+    string company = 2;
+
+    // The assigned Task Type address.
+    string task = 3;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 4;
+}
+
+message CertificationAuthority {
+    // The Certification Authority's public key.
+    string publicKey = 1;
+
+    // The Certification Authority name.
+    string name = 2;
+
+    // The Certification Authority website.
+    string website = 3;
+
+    // A list of enabled Product Types addresses where recording the certificate.
+    repeated string enabledProductTypes = 4;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 5;
+}

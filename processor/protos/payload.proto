@@ -1,0 +1,289 @@
+syntax = "proto3";
+
+package sawchain;
+
+import "types.proto";
+import "company.proto";
+import "event.proto";
+import "batch.proto";
+
+message SCPayload {
+    enum Action {
+        CREATE_SYSTEM_ADMIN = 0;
+        UPDATE_SYSTEM_ADMIN = 1;
+        CREATE_TASK_TYPE = 2;
+        CREATE_PRODUCT_TYPE = 3;
+        CREATE_EVENT_PARAMETER_TYPE = 4;
+        CREATE_EVENT_TYPE = 5;
+        CREATE_PROPERTY_TYPE = 6;
+        CREATE_CERTIFICATION_AUTHORITY = 7;
+        CREATE_COMPANY = 8;
+        CREATE_FIELD = 9;
+        CREATE_OPERATOR = 10;
+        CREATE_DESCRIPTION_EVENT = 11;
+        CREATE_TRANSFORMATION_EVENT = 12;
+        ADD_BATCH_CERTIFICATE = 13;
+        RECORD_BATCH_PROPERTY = 14;
+        CREATE_PROPOSAL = 15;
+        ANSWER_PROPOSAL = 16;
+        FINALIZE_BATCH = 17;
+    }
+
+    Action action = 1;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 2;
+
+    UpdateSystemAdminAction updateSystemAdmin = 3;
+    CreateTaskTypeAction createTaskType = 4;
+    CreateProductTypeAction createProductType = 5;
+    CreateEventParameterTypeAction createEventParameterType = 6;
+    CreateEventTypeAction createEventType = 7;
+    CreatePropertyTypeAction createPropertyType = 8;
+    CreateCertificationAuthorityAction createCertificationAuthority = 9;
+    CreateCompanyAction createCompany = 10;
+    CreateFieldAction createField = 11;
+    CreateOperatorAction createOperator = 12;
+    CreateDescriptionEventAction createDescriptionEvent = 13;
+    CreateTransformationEventAction createTransformationEvent = 14;
+    AddBatchCertificateAction addBatchCertificate = 15;
+    RecordBatchPropertyAction recordBatchProperty = 16;
+    CreateProposalAction createProposal = 17;
+    AnswerProposalAction answerProposal = 18;
+    FinalizeBatchAction finalizeBatch = 19;
+}
+
+message UpdateSystemAdminAction {
+    // The new System Admin public key.
+    string publicKey = 1;
+}
+
+message CreateTaskTypeAction {
+    // The Task Type unique identifier.
+    string id = 1;
+
+    // The name of the task.
+    string task = 2;
+}
+
+message CreateProductTypeAction {
+    // The Product Type unique identifier.
+    string id = 1;
+
+    // The product name.
+    string name = 2;
+
+    // A short description of the product.
+    string description = 3;
+
+    // The unit of measure used for the product quantity.
+    Shared.UnitOfMeasure measure = 4;
+
+    // A list of derived Product Types with a quantity conversion rate.
+    repeated ProductType.DerivedProductType derivedProductTypes = 5;
+}
+
+message CreateEventParameterTypeAction {
+    // The Event Parameter Type unique identifier.
+    string id = 1;
+
+    // The Event Parameter Type name.
+    string name = 2;
+
+    // The Event Parameter Type information data type.
+    Shared.DataType dataType = 3;
+}
+
+message CreateEventTypeAction {
+    // The Event Type unique identifier.
+    string id = 1;
+
+    // The Event Type typology.
+    EventType.Typology typology = 2;
+
+    // The Event Type name.
+    string name = 3;
+
+    // The Event Type description.
+    string description = 4;
+
+    // A list of enabled Task Types addresses for recording the event.
+    repeated string enabledTaskTypes = 5;
+
+    // A list of enabled Product Types addresses where recording the event.
+    repeated string enabledProductTypes = 6;
+
+    // A list of Event Parameters with additional features.
+    repeated EventType.Parameter parameters = 7;
+
+    // A list of enabled derived Product Types addresses for the transformation of the product.
+    repeated string enabledDerivedProductTypes = 8;
+}
+
+message CreatePropertyTypeAction {
+    // The Property Type unique identifier.
+    string id = 1;
+
+    // The Property Type name.
+    string name = 2;
+
+    // The Property Type information data type.
+    Shared.DataType dataType = 3;
+
+    // A list of enabled Task Types addresses for recording the property.
+    repeated string enabledTaskTypes = 4;
+
+    // A list of enabled Product Types addresses where recording the property.
+    repeated string enabledProductTypes = 5;
+}
+
+message CreateCertificationAuthorityAction {
+    // The Certification Authority public key.
+    string publicKey = 1;
+
+    // The Certification Authority name.
+    string name = 2;
+
+    // The Certification Authority website.
+    string website = 3;
+
+    // A list of enabled Product Types addresses where recording the certificate.
+    repeated string enabledProductTypes = 4;
+}
+
+message CreateCompanyAction {
+    // The Company name.
+    string name = 1;
+
+    // A short description of the Company.
+    string description = 2;
+
+    // The Company website.
+    string website = 3;
+
+    // The Company Admin public key.
+    string admin = 4;
+
+    // A list of enabled Product Types addresses used in the Company.
+    repeated string enabledProductTypes = 5;
+}
+
+message CreateFieldAction {
+    // The Field unique identifier.
+    string id = 1;
+
+    // A short description of the Field.
+    string description = 2;
+
+    // The Product Type address of the cultivable product.
+    string product = 3;
+
+    // The predicted maximum production quantity.
+    double quantity = 4;
+
+    // The Field approximate location coordinates.
+    Shared.Location location = 5;
+}
+
+message CreateOperatorAction {
+    // The Operator's public key.
+    string publicKey = 1;
+
+    // The assigned Task Type address.
+    string task = 2;
+}
+
+message CreateDescriptionEventAction {
+    // The Event Type address.
+    string eventType = 1;
+
+    // A company Batch address where recording the event.
+    string batch = 2;
+
+    // A company Field address where recording the event.
+    string field = 3;
+
+    // A list of values for each Parameter Type.
+    repeated Event.ParameterValue values = 4;
+}
+
+message CreateTransformationEventAction {
+    // The Event Type address.
+    string eventType = 1;
+
+    // A list of company Batches addresses to transform.
+    repeated string batches = 2;
+
+    // A list of company Fields addresses to transform.
+    repeated string fields = 3;
+
+    // A list of corresponding quantities for transformation.
+    repeated double quantities = 4;
+
+    // The output Product Type address.
+    string derivedProduct = 5;
+
+    // The output Batch unique identifier.
+    string outputBatchId = 6;
+}
+
+message AddBatchCertificateAction {
+    // The Batch state address.
+    string batch = 1;
+
+    // The Company state address.
+    string company = 2;
+
+    // The Certificate external resource link.
+    string link = 3;
+
+    // The Certificate external resource hash.
+    string hash = 4;
+}
+
+message RecordBatchPropertyAction {
+    // The Batch state address where record the Property.
+    string batch = 1;
+
+    // The Property Type state address.
+    string propertyType = 2;
+
+    // The Property Value used to update the Property on Batch.
+    Batch.PropertyValue propertyValue = 3;
+}
+
+message CreateProposalAction {
+    // The Batch state address.
+    string batch = 1;
+
+    // The receiver Company state address.
+    string receiverCompany = 2;
+
+    // A note for issuing the Proposal.
+    string notes = 3;
+}
+
+message AnswerProposalAction {
+    // The Batch state address.
+    string batch = 1;
+
+    // The sender Company state address.
+    string senderCompany = 2;
+
+    // The new Proposal status.
+    Proposal.Status response = 3;
+
+    // A motivation to answer the Proposal.
+    string motivation = 4;
+}
+
+message FinalizeBatchAction {
+    // The Batch state address.
+    string batch = 1;
+
+    // The Batch finalization reason.
+    Batch.Finalization.Reason reason = 2;
+
+    // A short explanation for the finalization.
+    string explanation = 3;
+}

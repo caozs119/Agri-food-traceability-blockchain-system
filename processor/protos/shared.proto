@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sawchain;
+
+message Shared {
+    message Location {
+        // Latitude coordinate.
+        sint64 latitude = 1;
+
+        // Longitude coordinate.
+        sint64 longitude = 2;
+    }
+
+    // Possible values for Unit of Measure.
+    enum UnitOfMeasure {
+        KILOS = 0;
+        LITRE = 1;
+        METRE = 2;
+        UNIT = 3;
+    }
+
+    // Possible values for DataType.
+    enum DataType {
+        NUMBER = 0;
+        STRING = 1;
+        BYTES = 2;
+        LOCATION = 3;
+    }
+}

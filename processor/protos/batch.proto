@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package sawchain;
+
+import "event.proto";
+import "shared.proto";
+
+message Batch {
+    message Finalization {
+        enum Reason {
+            WITHDRAWN = 0;
+            SOLD = 1;
+            EXPIRED = 2;
+        }
+
+        // The Batch finalization reason.
+        Reason reason = 1;
+
+        // The reporter Operator public key.
+        string reporter = 2;
+
+        // A short explanation for the finalization.
+        string explanation = 3;
+    }
+
+    message Property {
+        // The Property Type address.
+        string propertyType = 1;
+
+        // A list of values update for the Property Type.
+        repeated PropertyValue values = 2;
+    }
+
+    message PropertyValue {
+        // Only one of these fields should be used according to Type.
+        double numberValue = 1;
+        string stringValue = 2;
+        bytes bytesValue = 3;
+        Shared.Location locationValue = 4;
+
+        uint64 timestamp = 5;
+    }
+
+    // The Batch unique identifier.
+    string id = 1;
+
+    // The Company state address.
+    string company = 2;
+
+    // The Product Type state address.
+    string product = 3;
+
+    // The Batch current quantity.
+    double quantity = 4;
+
+    // A list of company parent Fields addresses.
+    repeated string parentFields = 5;
+
+    // A list of company parent Batches addresses.
+    repeated string parentBatches = 6;
+
+    // A list of recorded Events.
+    repeated Event events = 7;
+
+    // A list of recorded Certificates.
+    repeated Certificate certificates = 8;
+
+    // A list of recorded Properties.
+    repeated Property properties = 9;
+
+    // A list of recorded Proposals.
+    repeated Proposal proposals = 10;
+
+    // The Finalization status.
+    Finalization finalization = 11;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp.
+    uint64 timestamp = 12;
+}
+
+message Proposal {
+    enum Status {
+        ISSUED = 0;
+        CANCELED = 1;
+        ACCEPTED = 2;
+        REJECTED = 3;
+    }
+
+    // The sender Company state address.
+    string senderCompany = 1;
+
+    // The receiver Company state address.
+    string receiverCompany = 2;
+
+    // The Proposal current status.
+    Status status = 3;
+
+    // A note for issuing the Proposal.
+    string notes = 4;
+
+    // A note to motivate the answer.
+    string motivation = 5;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp.
+    uint64 timestamp = 6;
+}
+
+message Certificate {
+    // The Certification Authority public key.
+    string authority = 1;
+
+    // The Certificate external resource link.
+    string link = 2;
+
+    // The Certificate external resource hash.
+    string hash = 3;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp.
+    uint64 timestamp = 4;
+}

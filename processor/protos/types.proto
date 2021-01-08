@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package sawchain;
+
+import "shared.proto";
+
+message TaskType {
+    // The Task Type unique identifier.
+    string id = 1;
+
+    // The name of the task.
+    string task = 2;
+}
+
+message ProductType {
+    message DerivedProductType {
+        // The derived Product Type state address.
+        string productTypeAddress = 1;
+
+        // A multiplier value for the quantity conversion rate.
+        double conversionRate = 2;
+    }
+
+    // The Product Type unique identifier.
+    string id = 1;
+
+    // The product name.
+    string name = 2;
+
+    // A short description of the product.
+    string description = 3;
+
+    // The unit of measure used for the product quantity.
+    Shared.UnitOfMeasure measure = 4;
+
+    // A list of derived Product Types with a quantity conversion rate.
+    repeated DerivedProductType derivedProductTypes = 5;
+}
+
+message EventParameterType {
+    // The Event Parameter Type unique identifier.
+    string id = 1;
+
+    // The Event Parameter Type name.
+    string name = 2;
+
+    // The Event Parameter Type information data type.
+    Shared.DataType dataType = 3;
+}
+
+message EventType {
+    enum Typology {
+        // Deal with information.
+        DESCRIPTION = 0;
+        // Deal with quantities.
+        TRANSFORMATION = 1;
+    }
+
+    message Parameter {
+        // The Event Parameter Type state address.
+        string eventParameterTypeAddress = 1;
+
+        // The Event Parameter additional features.
+        bool required = 2;
+        int32 minValue = 3;
+        int32 maxValue = 4;
+        int32 minLength = 5;
+        int32 maxLength = 6;
+    }
+
+    // The Event Type unique identifier.
+    string id = 1;
+
+    // The Event Type typology.
+    Typology typology = 2;
+
+    // The Event Type name.
+    string name = 3;
+
+    // A short description of the event.
+    string description = 4;
+
+    // A list of enabled Task Types addresses for recording the event.
+    repeated string enabledTaskTypes = 5;
+
+    // A list of enabled Product Types addresses where recording the event.
+    repeated string enabledProductTypes = 6;
+
+    // A list of Event Parameters with additional features.
+    repeated Parameter parameters = 7;
+
+    // A list of enabled derived Product Types addresses for the transformation of the product.
+    repeated string enabledDerivedProductTypes = 8;
+}
+
+message PropertyType {
+    // The Property Type unique identifier.
+    string id = 1;
+
+    // The Property Type name.
+    string name = 2;
+
+    // The Property Type information data type.
+    Shared.DataType dataType = 3;
+
+    // A list of enabled Task Types addresses for recording the property.
+    repeated string enabledTaskTypes = 4;
+
+    // A list of enabled Product Types addresses where recording the property.
+    repeated string enabledProductTypes = 5;
+}
